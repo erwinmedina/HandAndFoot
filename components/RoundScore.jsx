@@ -1,4 +1,4 @@
-import { TouchableOpacity,View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";

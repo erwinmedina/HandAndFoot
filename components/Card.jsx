@@ -1,5 +1,4 @@
-import { View, Image, StyleSheet, TextInput } from 'react-native';
-import { useState } from 'react';
+import { View, Image, StyleSheet } from 'react-native';
 
 export default function Card({ imageName }) {
     return (
@@ -17,6 +16,10 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: '#ccc',
         overflow: 'hidden',
+        shadowColor: 'black',
+        shadowOffset: {width: 10, height: 15},
+        shadowOpacity: 1,
+        shadowRadius: 10,
     },
     image: {
         width: "100%",

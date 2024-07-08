@@ -1,5 +1,6 @@
 import { View, TextInput, FlatList, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import Card from "./Card";
+import CounterInput from "./CounterInput";
 
 export default function CardGrid({ updateTotalPoints, userInput, setUserInput}) {
 
@@ -21,11 +22,19 @@ export default function CardGrid({ updateTotalPoints, userInput, setUserInput}) 
         { id: 15, imageName: require('../assets/images/black_joker.png'), value: 50},
     ];
 
-    const handleInputChange = (cardId, text) => {
-        const parsedValue = parseInt(text) || "";
+    const handleIncrement = (cardId) => {
         const updatedUserInput = {
             ...userInput,
-            [cardId]: parsedValue
+            [cardId]: (userInput[cardId] || 0) + 1,
+        };
+        setUserInput(updatedUserInput);
+        const newTotalPoints = calculateTotalPoints(updatedUserInput);
+        updateTotalPoints(newTotalPoints);
+    }
+    const handleDecrement = (cardId) => {
+        const updatedUserInput = {
+            ...userInput,
+            [cardId]: (userInput[cardId] || 0) - 1,
         };
         setUserInput(updatedUserInput);
         const newTotalPoints = calculateTotalPoints(updatedUserInput);
@@ -35,7 +44,7 @@ export default function CardGrid({ updateTotalPoints, userInput, setUserInput}) 
     const calculateTotalPoints = (updatedUserInput) => {
         let calculatedPoints = 0;
         cards.forEach(card => {
-            const userInputValue = updatedUserInput[card.id] || "";
+            const userInputValue = updatedUserInput[card.id] || 0;
             calculatedPoints += card.value * userInputValue;
         })
         return calculatedPoints;
@@ -46,12 +55,11 @@ export default function CardGrid({ updateTotalPoints, userInput, setUserInput}) 
             <View style={styles.cardContainer}>
                 <Card imageName={item.imageName}/>
                 <View style={styles.inputBox}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="#"
-                        keyboardType='numeric'
-                        value={userInput[item.id]?.toString() || ""}
-                        onChangeText={(text) => handleInputChange(item.id, text)}
+                    <CounterInput
+                        cardId={item.id}
+                        value={userInput[item.id] || 0}
+                        onIncrement={handleIncrement}
+                        onDecrement={handleDecrement}
                     />
                 </View>
             </View>
@@ -89,26 +97,13 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     inputBox: {
-        flex: 1,
+        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 2,
+        shadowColor: 'black',
+        shadowOffset: {width: 0, height: 5},
+        shadowOpacity: 1,
+        shadowRadius: 5,
     },
-    input: {
-        width: "80%",
-        height: 40,
-        borderWidth: 1,
-        borderColor: 'white',
-        borderRadius: 20,
-        padding: 5,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        color: "white",
-        marginBottom: 30,
-    },
-    cardContainer: {
-        // flexDirection: 'row',
-        // alignItems: "center",
-        // marginVertical: 10,
-    }
 })
