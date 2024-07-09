@@ -1,12 +1,19 @@
 import { StyleSheet, View, Text, SafeAreaView } from "react-native"
 import { useFonts, Sriracha_400Regular } from "@expo-google-fonts/dev"
-import { AppLoading } from "expo-app-loading";
+import AppLoading from "expo-app-loading";
 
 export default function CustomHeader() {
+    let [fontsLoaded] = useFonts({
+        Sriracha_400Regular,
+    })
+    if (!fontsLoaded) {
+        return <AppLoading/>
+    }
+
     return (
         <SafeAreaView styles={styles.safeArea}>
             <View style={styles.header}>
-                <Text style={styles.headerText}>Hand and Foot</Text>
+                <Text style={styles.headerText}>Hand & Foot</Text>
             </View>
         </SafeAreaView>
     )

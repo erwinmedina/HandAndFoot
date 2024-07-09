@@ -16,7 +16,6 @@ export default function FooterButons({ onEndRound, onEndGame }) {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginTop: 20,
@@ -46,5 +45,6 @@ const styles = StyleSheet.create({
         color: "white",
         fontWeight: "bold",
         fontSize: 20,
+        fontFamily: "Sriracha_400Regular",
     }
 })

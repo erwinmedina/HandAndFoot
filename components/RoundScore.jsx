@@ -1,84 +1,119 @@
-import { View, StyleSheet, Text } from "react-native";
-import { SelectList } from "react-native-dropdown-select-list";
-import { useState } from "react";
-import { FontAwesome } from "@expo/vector-icons";
-import { useEffect } from "react";
+import { View, StyleSheet, Text, TouchableOpacity, Animated } from "react-native";
+import { useState, useEffect, useRef } from "react";
+// import { transform } from "@babel/core";
 
 export default function RoundScore({ totalPoints, currentRound, rounds, onChangeRound, gameScore}) {
-    const roundOptions = [1,2,3,4];
     const [selectedRound, setSelectedRound] = useState("1");
+    const [flipped, setFlipped] = useState(false);
+    const flipAnimation = useRef(new Animated.Value(0)).current;
+
     useEffect(() => {
         setSelectedRound(currentRound.toString());
     }, [currentRound]);
 
-    const data = [
-        { key: '1', value: 'Round 1' },
-        { key: '2', value: 'Round 2' },
-        { key: '3', value: 'Round 3' },
-        { key: '4', value: 'Round 4' },
-        { key: '5', value: 'All Rounds' },
-    ]
-
-    const handleRoundSelect = (value) => {
-        setSelectedRound(value);
-        onChangeRound(value);
+    const flipCard = () => {
+        if (flipped) {
+            Animated.spring(flipAnimation, {
+                toValue: 0,
+                useNativeDriver: true,
+            }).start();
+        } else {
+            Animated.spring(flipAnimation, {
+                toValue: 1,
+                useNativeDriver: true,
+            }).start();
+        }
+        setFlipped(!flipped);
     }
 
+    const frontInterpolate = flipAnimation.interpolate({
+        inputRange: [0,1],
+        outputRange: ["0deg", "180deg"]
+    });
+    const backInterpolate = flipAnimation.interpolate({
+        inputRange: [0,1],
+        outputRange: ["180deg", "360deg"]
+    });
+    const frontAnimatedStyle = {
+        transform: [{rotateY: frontInterpolate}]
+    }
+    const backAnimatedStyle = {
+        transform: [{rotateY: backInterpolate}]
+    }
+
+
     return (
-        <View style={[styles.box, styles.parentScore]}>
-            <SelectList
-                setSelected={handleRoundSelect}
-                data={data}
-                save="key"
-                search={false}
-                defaultOption={{key: '1', value: 'Round 1'}}
-                maxHeight={200}
-                arrowicon={<FontAwesome name="chevron-down" size={12} color={'white'}/>}
-                dropdownStyles={{
-                    position: "absolute", 
-                    top: 35,
-                    width: 150,
-                    color: "white",
-                }}
-                boxStyles={{
-                    backgroundColor: 'blue',
-                    borderTopLeftRadius: 20,
-                    borderTopRightRadius: 20,
-                    borderBottomLeftRadius: 0,
-                    borderBottomRightRadius: 0,
-                    width: 150,
-                    borderWidth: 1,
-                    borderColor: 'white',
-                }}
-                inputStyles={{
-                    color: 'white',
-                    marginRight: 10,
-                    fontWeight: "bold",
-                }}
-            />
-            <View style={[styles.box, styles.points]}>
-                <Text style={styles.score}>Round {selectedRound}: {totalPoints}</Text>
-                <Text style={styles.score}>Total Score: {gameScore}</Text>
+        <TouchableOpacity onPress={flipCard} >
+            <View style={styles.mainCard}>
+                <Animated.View style={[styles.card, frontAnimatedStyle, !flipped && styles.hidden]}>
+                        <View style={[styles.box, styles.points]}>
+                            <Text style={[styles.score, styles.scoreTitles]}>Round {selectedRound}:</Text>
+                            <Text style={[styles.score, styles.scoreNums]}>{totalPoints}</Text>
+                            <Text style={[styles.score, styles.scoreTitles]}>Total Score:</Text>
+                            <Text style={[styles.score, styles.scoreNums, styles.lastNums]}>{gameScore}</Text>
+                        </View>
+                </Animated.View>
+                <Animated.View style={[styles.card, styles.cardBack, backAnimatedStyle, flipped && styles.hidden]}>
+                    <View style={[styles.box, styles.points]}>
+                        {rounds.map((round, index) => (
+                            <View style={styles.totalScoresRead}>
+                                <Text style={[styles.score, styles.scoreTitles]}>Round {index + 1}:</Text>
+                                <Text style={[styles.score, styles.scoreTitles]}>{round.points || 0}</Text>
+                            </View>
+                        ))}
+                        <Text style={[styles.score, styles.scoreTitles]}>Total: {gameScore}</Text>
+                    </View>
+                </Animated.View>
             </View>
-        </View>
+
+        </TouchableOpacity>
     )
 }
-
 const styles = StyleSheet.create({
-    points: {
-        backgroundColor: 'red',
-        padding: 10,
+    card: {
+        backfaceVisibility: 'hidden',
         width: 150,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderBottomWidth: 1,
+    },
+    cardBack: {
+        position: 'absolute',
+        top: 0,
+        width: 150,
+    },
+    hidden: {
+        zIndex: -1,
+    },
+    points: {
+        backgroundColor: 'blue',
+        width: 150,
+        borderRadius: 20,
+        borderWidth: 1,
         borderColor: 'white',
         zIndex: -5,
     },
     score: {
         color: 'white',
         fontWeight: 'bold',
+        fontFamily: "Sriracha_400Regular",
     },
-})
+    scoreTitles: {
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    scoreNums: {
+        textAlign: 'center',
+        fontSize: 20,
+    },
+    lastNums: {
+        marginBottom: 10,
+    },
+    totalScoresRead: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    mainCard: {
+    }
+});

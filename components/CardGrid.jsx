@@ -5,21 +5,21 @@ import CounterInput from "./CounterInput";
 export default function CardGrid({ updateTotalPoints, userInput, setUserInput}) {
 
     const cards = [
-        { id: 1, imageName: require('../assets/images/ace_of_spades.png'), value: 20},
-        { id: 2, imageName: require('../assets/images/2_of_clubs.png'), value: 20},
-        { id: 3, imageName: require('../assets/images/3_of_clubs.png'), value: 0},
-        { id: 4, imageName: require('../assets/images/3_of_diamonds.png'), value: -100},
-        { id: 5, imageName: require('../assets/images/4_of_clubs.png'), value: 5},
-        { id: 6, imageName: require('../assets/images/5_of_hearts.png'), value: 5},
-        { id: 7, imageName: require('../assets/images/6_of_clubs.png'), value: 5},
-        { id: 8, imageName: require('../assets/images/7_of_diamonds.png'), value: 5},
-        { id: 9, imageName: require('../assets/images/8_of_spades.png'), value: 10},
-        { id: 10, imageName: require('../assets/images/9_of_hearts.png'), value: 10},
-        { id: 11, imageName: require('../assets/images/10_of_clubs.png'), value: 10},
-        { id: 12, imageName: require('../assets/images/jack_of_diamonds2.png'), value: 10},
-        { id: 13, imageName: require('../assets/images/queen_of_hearts2.png'), value: 10},
-        { id: 14, imageName: require('../assets/images/king_of_spades2.png'), value: 10},
-        { id: 15, imageName: require('../assets/images/black_joker.png'), value: 50},
+        { id: 1, imageName: require('../assets/images/ace_of_spades.png'), value: 20, name: 'Ace'},
+        { id: 2, imageName: require('../assets/images/2_of_clubs.png'), value: 20, name: '2'},
+        { id: 3, imageName: require('../assets/images/3_of_clubs.png'), value: 0, name: 'Black 3'},
+        { id: 4, imageName: require('../assets/images/3_of_diamonds.png'), value: -100, name: 'Red 3'},
+        { id: 5, imageName: require('../assets/images/4_of_clubs.png'), value: 5, name: '4'},
+        { id: 6, imageName: require('../assets/images/5_of_hearts.png'), value: 5, name: '5'},
+        { id: 7, imageName: require('../assets/images/6_of_clubs.png'), value: 5, name: '6'},
+        { id: 8, imageName: require('../assets/images/7_of_diamonds.png'), value: 5, name: '7'},
+        { id: 9, imageName: require('../assets/images/8_of_spades.png'), value: 10, name: '8'},
+        { id: 10, imageName: require('../assets/images/9_of_hearts.png'), value: 10, name: '9'},
+        { id: 11, imageName: require('../assets/images/10_of_clubs.png'), value: 10, name: '10'},
+        { id: 12, imageName: require('../assets/images/jack_of_diamonds2.png'), value: 10, name: 'Jack'},
+        { id: 13, imageName: require('../assets/images/queen_of_hearts2.png'), value: 10, name: 'Queen'},
+        { id: 14, imageName: require('../assets/images/king_of_spades2.png'), value: 10, name: 'King'},
+        { id: 15, imageName: require('../assets/images/black_joker.png'), value: 50, name: 'Joker'},
     ];
 
     const handleIncrement = (cardId) => {

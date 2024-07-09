@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 20,
         fontWeight: "bold",
+        fontFamily: "Sriracha_400Regular",
     },
     value: {
         flex: 1,
@@ -63,5 +64,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 20,
         fontWeight: "bold",
+        fontFamily: "Sriracha_400Regular",
     }
 })

@@ -1,80 +1,146 @@
 import { StyleSheet, View, Text } from "react-native"
-import SplitButton from "./SplitButton"
 import RoundScore from "./RoundScore"
 import { useState } from "react"
 import CardGrid from "./CardGrid";
 import FooterButtons from "./FooterButtons";
+import BookInput from "./BookInput";
+import { useFonts, Sriracha_400Regular } from "@expo-google-fonts/dev"
+import AppLoading from "expo-app-loading";
+import RoundPopUp from "./RoundPopUp";
+import Confirmation from "./Confirmation";
 
 export default function BoxLayoutHeader() {
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [endGamePopUp, setEndGamePopUp] = useState(false);
     const [totalPoints, setTotalPoints] = useState(0);
     const [userInput, setUserInput] = useState({})
     const [currentRound, setCurrentRound] = useState(1);
     const [rounds, setRounds] = useState([{}, {}, {}, {}]);
     const [gameScore, setGameScore] = useState(0);
+    const [naturalBookCount, setNaturalBookCount] = useState(0);
+    const [UnnaturalBookCount, setUnnaturalBookCount] = useState(0);
 
-    const updateTotalPoints = (newPoints) => {
-        setTotalPoints(newPoints);
+    let [fontsLoaded] = useFonts({
+        Sriracha_400Regular,
+    })
+    if (!fontsLoaded) {
+        return <AppLoading/>
     }
-    const clearUserInputs = () => {
-        setUserInput({})
-        setTotalPoints(0);
+
+    const handleClosePopup = () => {
+        setPopupVisible(false);
     }
-    const endGame = () => {
-        setRounds([{}, {}, {}, {}])
-        setGameScore(0)
-        setCurrentRound(1)
-        setUserInput({})
-        setTotalPoints(0)
-    }
-    const handleEndRound = () => {
+
+    const handleContinue = () => {
         const updatedRounds = [...rounds];
         updatedRounds[currentRound - 1] = { points: totalPoints };
         setRounds(updatedRounds);
-
+        
         clearUserInputs();
         if (currentRound < 4) {
             setCurrentRound(prevRound => prevRound + 1);
         }
         const newGameScore = updatedRounds.reduce((acc, round) => acc + (round.points || 0), 0);
         setGameScore(newGameScore);
+        setPopupVisible(false);
     }
+
+    const updateTotalPoints = (newPoints) => {
+        setTotalPoints(newPoints);
+    }
+
+    const clearUserInputs = () => {
+        setUserInput({})
+        setTotalPoints(0);
+        setNaturalBookCount(0);
+        setUnnaturalBookCount(0);
+    }
+
+    const endGame = () => {
+        setRounds([{}, {}, {}, {}])
+        setGameScore(0)
+        setCurrentRound(1)
+        setUserInput({})
+        setTotalPoints(0)
+        setNaturalBookCount(0);
+        setUnnaturalBookCount(0);
+        setEndGamePopUp(false);
+    }
+    const handleEndGamePopUpOpen = () => {
+        setEndGamePopUp(true);
+    }
+    const handleEndGamePopUpClose = () => {
+        setEndGamePopUp(false);
+    }
+
+    const handleEndRound = () => {
+        setPopupVisible(true);
+    }
+
     const handleChangeRound = (selectedRound) => {
         setCurrentRound(parseInt(selectedRound));
     }
 
     const handleNaturalBook = (increment) => {
-        if (totalPoints < 500 && !increment) {
-            return
+        if (increment) {
+            setNaturalBookCount(prevCount => prevCount + 1);
+            setTotalPoints(prevPoints => prevPoints + 500);
+        } else {
+            if (naturalBookCount > 0) {
+                setNaturalBookCount(prevCount => prevCount - 1);
+                setTotalPoints(prevPoints => prevPoints - 500);
+            }
         }
-        const incrementValue = increment ? 500 : -500;
-        setTotalPoints(prevPoints => prevPoints + incrementValue);
     }
     const handleUnnaturalBook = (increment) => {
-        if (totalPoints < 300 && !increment) {
-            return
+        if (increment) {
+            setUnnaturalBookCount(prevCount => prevCount + 1);
+            setTotalPoints(prevPoints => prevPoints + 300);
+        } else {
+            if (UnnaturalBookCount > 0) {
+                setUnnaturalBookCount(prevCount => prevCount - 1);
+                setTotalPoints(prevPoints => prevPoints - 300);
+            }
         }
-        const incrementValue = increment ? 300 : -300;
-        setTotalPoints(prevPoints => prevPoints + incrementValue);
     }
+    const tableData = [
+        ['Natural', naturalBookCount],
+        ['Unnatural', UnnaturalBookCount],
+        ['Ace', userInput[1] || 0],
+        ['2', userInput[2] || 0],
+        ['Black 3', userInput[3] || 0],
+        ['Red 3', userInput[4] || 0],
+        ['4', userInput[5] || 0],
+        ['5', userInput[6] || 0],
+        ['6', userInput[7] || 0],
+        ['7', userInput[8] || 0],
+        ['8', userInput[9] || 0],
+        ['9', userInput[10] || 0],
+        ['10', userInput[11] || 0],
+        ['Jack', userInput[12] || 0],
+        ['Queen', userInput[13] || 0],
+        ['King', userInput[14] || 0],
+        ['Joker', userInput[15] || 0],
+    ];
 
     return (
         <View style={styles.container}>
             <View style={styles.topHalf}>
                 <View style={styles.leftColumn}>
                     <View style={[styles.box, styles.box1]}>
-                        <SplitButton
-                            leftLabel="Natural Book"
-                            rightLabel="Undo"
-                            onLeftPress={() => handleNaturalBook(true)}
-                            onRightPress={() => handleNaturalBook(false)}
+                        <BookInput 
+                            bookType={"Natural Book"} 
+                            count={naturalBookCount}
+                            onIncrement={() => handleNaturalBook(true)}
+                            onDecrement={() => handleNaturalBook(false)}
                         />
                     </View>
                     <View style={styles.box}>
-                        <SplitButton
-                            leftLabel="Unnatural Book"
-                            rightLabel="Undo"
-                            onLeftPress={() => handleUnnaturalBook(true)}
-                            onRightPress={() => handleUnnaturalBook(false)}
+                    <BookInput 
+                            bookType={"Unnatural Book"} 
+                            count={UnnaturalBookCount}
+                            onIncrement={() => handleUnnaturalBook(true)}
+                            onDecrement={() => handleUnnaturalBook(false)}
                         />
                     </View>
                 </View>
@@ -88,7 +154,20 @@ export default function BoxLayoutHeader() {
             <View style={styles.theCardGrid}>
                 <CardGrid updateTotalPoints={updateTotalPoints} userInput={userInput} setUserInput={setUserInput}/>
             </View>
-            <FooterButtons onEndRound={handleEndRound} onEndGame={endGame}/>
+            <FooterButtons onEndRound={handleEndRound} onEndGame={handleEndGamePopUpOpen}/>
+            <RoundPopUp
+                visible={popupVisible}
+                onClose={handleClosePopup}
+                onContinue={handleContinue}
+                tableData={tableData}
+                totalSum={totalPoints}
+                currentRound={currentRound}
+            />
+            <Confirmation
+                visible={endGamePopUp}
+                onClose={handleEndGamePopUpClose}
+                onConfirm={endGame}
+            />
         </View>
     )
 }
@@ -103,13 +182,9 @@ const styles = StyleSheet.create({
         marginBottom: 50,
         flexDirection: 'row',
         justifyContent: 'center',
-        height: 100,
     },
     leftColumn: {
-        flex: 1,
-        flexDirection: "column",
-        justifyContent: 'space-between',
-        height: "100%",
+        width: "50%",
     },
     rightColumn: {
         flex: 1,
