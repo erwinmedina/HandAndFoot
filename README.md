@@ -8,8 +8,15 @@ I wanted to create a simple design/application for my first React Native project
 
 Because this is a game that involves a team of 2 individuals, there is still work that is required to making the application more flexible and understanding of how that works. 
 
-## Images
-![Test 1](https://i.imgur.com/NVsiE0R.mp4)
+## Demo/Images
+
+| Page | Image |
+| ---- | ----- |
+| Demo | <video controls src="https://i.imgur.com/NVsiE0R.mp4" title="https://i.imgur.com/NVsiE0R.mp4" width="200"></video> |
+| End Round Pop Up| ![End Round Pop Up](https://i.imgur.com/gexEw6B.jpg)
+| Score Board Flip | ![Score Board Flip](https://i.imgur.com/NmyAx6i.jpg)
+| End Game Confirmation | ![End Game Confirmation Pop Up](https://i.imgur.com/7lqtFHk.jpg)
+| Final Report | ![Final Report](https://i.imgur.com/WIHb9DL.jpg)
 
 ## Technology Used
 - React Native (Javascript)
