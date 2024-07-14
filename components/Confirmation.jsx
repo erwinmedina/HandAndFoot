@@ -5,22 +5,21 @@ export default function Confirmation({visible, onClose, onConfirm}) {
         <Modal
             transparent={true}
             visible={visible}
-            animationType="slide"
+            animationType="fade"
         >
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
                     <Text style={styles.modalTitle}>Are you ready to end this game?!</Text>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.button} onPress={onClose}>
+                        <TouchableOpacity style={[styles.button, styles.buttonLeft]} onPress={onClose}>
                             <Text style={styles.buttonText}>Nahh</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={onConfirm}>
+                        <TouchableOpacity style={[styles.button, styles.buttonRight]} onPress={onConfirm}>
                             <Text style={styles.buttonText}>Absolutely</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
-
         </Modal>
     )
 }
@@ -38,12 +37,17 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         alignItems: 'center',
+        shadowColor: 'black',
+        shadowOffset: {width: 0, height: 5},
+        shadowOpacity: 1,
+        shadowRadius: 5,
     },
     modalTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 25,
         textAlign: 'center',
+        fontFamily: "Sriracha_400Regular",
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -56,6 +60,16 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         width: '45%',
         alignItems: 'center',
+        shadowColor: 'black',
+        shadowOffset: {width: 0, height: 5},
+        shadowOpacity: .8,
+        shadowRadius: 3,
+    },
+    buttonLeft: {
+        backgroundColor: 'teal',
+    },
+    buttonRight: {
+        backgroundColor: "orangered"
     },
     buttonText: {
         color: 'white',

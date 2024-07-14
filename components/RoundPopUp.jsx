@@ -10,9 +10,24 @@ export default function RoundPopUp({visible, onClose, onContinue, tableData, tot
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.modalTitle}>Round {currentRound}</Text>
-                    <Text style={styles.modalTitle}>Score Sheet</Text>
+                    <Text style={styles.modalTitle}>Round {currentRound} Summary</Text>
                     <View>
+                        {/* Header Row */}
+                        <View style={styles.tableRow}>
+                            <View style={[styles.tableCell, styles.tableCellLeft, styles.tableHeader]}>
+                                <Text style={[styles.tableText, styles.tableHeaderText]}></Text>
+                            </View>
+                            <View style={styles.divider}></View>
+                            <View style={[styles.tableCell, styles.tableCellLeft, styles.tableHeader]}>
+                                <Text style={[styles.tableText, styles.tableHeaderText]}>Played</Text>
+                            </View>
+                            <View style={styles.divider}></View>
+                            <View style={[styles.tableCell, styles.tableCellLeft, styles.tableHeader]}>
+                                <Text style={[styles.tableText, styles.tableHeaderText]}>Unplayed</Text>
+                            </View>
+                        </View>
+
+                        {/* Data Row */}
                         {tableData.map((row, index) => (
                             <View key={index} style={[
                                 styles.tableRow,
@@ -25,18 +40,22 @@ export default function RoundPopUp({visible, onClose, onContinue, tableData, tot
                                 <View style={styles.tableCellLeft}>
                                     <Text style={styles.tableText}>{row[1]}</Text>
                                 </View>
+                                <View style={styles.divider}></View>
+                                <View style={styles.tableCellLeft}>
+                                    <Text style={styles.tableText}>{row[2]}</Text>
+                                </View>
                             </View>
                         ))}
                     </View>
                     <View style={styles.sumBox}>
-                        <Text style={styles.sumText}>TOTAL PTS: {totalSum}</Text>
+                        <Text style={styles.sumText}>TOTAL POINTS: {totalSum}</Text>
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={[styles.button, styles.buttonReview]} onPress={onClose}>
-                            <Text style={styles.buttonText}>REVIEW</Text>
+                            <Text style={styles.buttonText}>EDIT</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.button, styles.buttonContinue]}  onPress={onContinue}>
-                            <Text style={styles.buttonText}>CONTINUE</Text>
+                            <Text style={styles.buttonText}>NEXT ROUND</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -69,11 +88,15 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     modalTitle: {
-        fontSize: 20,
+        fontSize: 25,
+        marginBottom: 10,
         fontFamily: "Sriracha_400Regular",
     },
     table: {
         marginBottom: 10,
+    },
+    tableHeader: {
+        backgroundColor: "rgba(0,0,0,.3)",
     },
     tableRow: {
         flexDirection: 'row',
@@ -105,14 +128,13 @@ const styles = StyleSheet.create({
     },
     tableText: {
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: 'bold',
         fontFamily: "Sriracha_400Regular",
     },
     sumBox: {
         marginBottom: 10,
         marginTop: 10,
-        backgroundColor: 'teal',
         padding: 10,
         borderRadius: 20,
         minWidth: 200,
@@ -120,7 +142,8 @@ const styles = StyleSheet.create({
     sumText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'white',
+        fontFamily: "Sriracha_400Regular",
+        color: 'black',
         textAlign: 'center',
     },
     buttonContainer: {
@@ -136,6 +159,10 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 5,
         alignItems: 'center',
+        shadowColor: 'black',
+        shadowOffset: {width: 0, height: 5},
+        shadowOpacity: .7,
+        shadowRadius: 3,
     },
     buttonText: {
         color: 'white',
@@ -144,9 +171,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     buttonReview: {
-        backgroundColor: 'orange',
+        backgroundColor: 'orangered',
     },
     buttonContinue: {
-        backgroundColor: 'green',
+        backgroundColor: 'teal',
     }
 });

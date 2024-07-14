@@ -1,9 +1,11 @@
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function Card({ imageName }) {
+export default function Card({ imageName, cardId, onIncrement, onDecrement }) {
     return (
         <View style={styles.card}>
-            <Image source={imageName} style={styles.image} resizeMode="contain"/>
+            <TouchableOpacity onLongPress={()=> onDecrement(cardId)} onPress={() => onIncrement(cardId)}>
+                <Image source={imageName} style={styles.image} resizeMode="contain"/>
+            </TouchableOpacity>
         </View>
     )
 }

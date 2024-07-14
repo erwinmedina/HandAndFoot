@@ -4,19 +4,21 @@ import { TouchableOpacity, View, Text, StyleSheet} from "react-native";
 export default function CounterInput({ cardId, value, onIncrement, onDecrement }) {
     return (
         <View style={styles.container} >
-            <TouchableOpacity style={styles.Lefttouchable} onPress={() => onIncrement(cardId)}>
+            <TouchableOpacity style={styles.Lefttouchable} onPress={() => onDecrement(cardId)}>
                 <Text style={styles.button}>
-                    +
+                    -
                 </Text>
             </TouchableOpacity>
             
             <Text style={styles.value}>{value}</Text>
 
-            <TouchableOpacity style={styles.Righttouchable} onPress={() => onDecrement(cardId)}>
+            <TouchableOpacity style={styles.Righttouchable} onPress={() => onIncrement(cardId)}>
                 <Text style={styles.button}>
-                    -
+                    +
                 </Text>
             </TouchableOpacity>
+            
+
         </View>
     )
 }
@@ -32,7 +34,7 @@ const styles = StyleSheet.create({
         borderColor: "white",
         borderRadius: 20,
         marginBottom: 30,
-        backgroundColor: 'gray',
+        backgroundColor: '#70a0a3',
     },
     Lefttouchable: {
         flex: 1,
@@ -41,16 +43,16 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: "gray",
+        backgroundColor: "#70a0a3",
     },
     Righttouchable: {
         flex: 1,
         height: "100%",
         borderTopRightRadius: 20,
         borderBottomRightRadius: 20,
-        backgroundColor: "gray",
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: "#70a0a3",
     },
     button: {
         color: "white",

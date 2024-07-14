@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         zIndex: -1,
     },
     points: {
-        backgroundColor: 'blue',
+        backgroundColor: 'teal',
         width: 150,
         borderRadius: 20,
         borderWidth: 1,

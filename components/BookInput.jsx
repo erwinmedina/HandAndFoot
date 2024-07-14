@@ -7,20 +7,23 @@ export default function BookInput({bookType, count, onIncrement, onDecrement }) 
                 <Text style={styles.bookType}>{bookType}</Text>
             </View>
             <View style={styles.bottomHalf}>
-                <TouchableOpacity style={styles.Lefttouchable} onPress={onIncrement}>
-                    <Text style={styles.button}>
-                        +
-                    </Text>
-                </TouchableOpacity>
-                <View style={styles.valueContainer}>
-                    <Text style={styles.value}>{count}</Text>
-                </View>
 
-                <TouchableOpacity style={styles.Righttouchable} onPress={onDecrement}>
+                <TouchableOpacity style={styles.Lefttouchable} onPress={onDecrement}>
                     <Text style={styles.button}>
                         -
                     </Text>
                 </TouchableOpacity>
+
+                <View style={styles.valueContainer}>
+                    <Text style={styles.value}>{count}</Text>
+                </View>
+
+                <TouchableOpacity style={styles.Righttouchable} onPress={onIncrement}>
+                    <Text style={styles.button}>
+                        +
+                    </Text>
+                </TouchableOpacity>
+
             </View>
         </View>
     )
@@ -32,14 +35,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        height: 70,
+        height: 80,
         marginBottom: 5,
     },
     topHalf: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: "blue",
+        backgroundColor: "teal",
         width: "100%",
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
