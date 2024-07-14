@@ -11,7 +11,7 @@ import Confirmation from "./Confirmation";
 import FinalReport from "./FinalReport";
 import PlayedSection from "./PlayedSection";
 
-const calculateTotalPoints = (playedCards, unplayedCards) => {
+const calculateCardPoints = (playedCards, unplayedCards) => {
     let totalPoints = 0;
     for (let i = 1; i <= 15; i++) {
         const playedCardValue = (playedCards[i] && playedCards[i].value * playedCards[i].quantity) || 0;
@@ -28,12 +28,14 @@ export default function BoxLayoutHeader() {
     const [activeSection, setActiveSection] = useState("played");
     const [playedCards, setPlayedCards] = useState({});
     const [unplayedCards, setUnplayedCards] = useState({});
+    const [cardPoints, setCardPoints] = useState(0);
+    const [bookPoints, setBookPoints] = useState(0);
     const [totalPoints, setTotalPoints] = useState(0);
     const [currentRound, setCurrentRound] = useState(1);
     const [rounds, setRounds] = useState([{}, {}, {}, {}]);
     const [gameScore, setGameScore] = useState(0);
     const [naturalBookCount, setNaturalBookCount] = useState(0);
-    const [UnnaturalBookCount, setUnnaturalBookCount] = useState(0);
+    const [unnaturalBookCount, setUnnaturalBookCount] = useState(0);
 
     const playedCardList = [
         { id: 1, imageName: require('../assets/images/ace_of_spades.png'), value: 20, name: 'Ace'},
@@ -77,6 +79,11 @@ export default function BoxLayoutHeader() {
         return <AppLoading/>
     }
 
+    const calculateTotalPoints = (cardPoints, bookPoints) => {
+        console.log(cardPoints, bookPoints);
+        return cardPoints + bookPoints;
+    }
+
     const handleClosePopup = () => {
         setPopupVisible(false);
     }
@@ -108,8 +115,9 @@ export default function BoxLayoutHeader() {
             [cardId]: { quantity, value },
         };
         setPlayedCards(updatedPlayedCards);
-        const newTotalPoints = calculateTotalPoints(updatedPlayedCards, unplayedCards);
-        setTotalPoints(newTotalPoints);
+        const newCardPoints = calculateCardPoints(updatedPlayedCards, unplayedCards);
+        setCardPoints(newCardPoints);
+        setTotalPoints(calculateTotalPoints(newCardPoints, bookPoints));
     };
 
     const updateUnplayedCards = (cardId, quantity, value) => {
@@ -118,8 +126,9 @@ export default function BoxLayoutHeader() {
             [cardId]: { quantity, value },
         };
         setUnplayedCards(updatedUnplayedCards);
-        const newTotalPoints = calculateTotalPoints(playedCards, updatedUnplayedCards);
-        setTotalPoints(newTotalPoints);
+        const newCardPoints = calculateCardPoints(playedCards, updatedUnplayedCards);
+        setCardPoints(newCardPoints);
+        setTotalPoints(calculateTotalPoints(newCardPoints, bookPoints));
     };
 
     const clearUserInputs = () => {
@@ -162,29 +171,37 @@ export default function BoxLayoutHeader() {
 
     const handleNaturalBook = (increment) => {
         if (increment) {
-            setNaturalBookCount(prevCount => prevCount + 1);
-            setTotalPoints(prevPoints => prevPoints + 500);
+            setNaturalBookCount(naturalBookCount + 1);
+            const newBookPoints = (naturalBookCount+1) * 500 + unnaturalBookCount * 300;
+            setBookPoints(newBookPoints);
+            setTotalPoints(calculateTotalPoints(cardPoints, newBookPoints));
         } else {
             if (naturalBookCount > 0) {
-                setNaturalBookCount(prevCount => prevCount - 1);
-                setTotalPoints(prevPoints => prevPoints - 500);
+                setNaturalBookCount(naturalBookCount - 1);
+                const newBookPoints = (naturalBookCount-1) * 500 + unnaturalBookCount * 300;
+                setBookPoints(newBookPoints);
+                setTotalPoints(calculateTotalPoints(cardPoints, newBookPoints));
             }
         }
     }
     const handleUnnaturalBook = (increment) => {
         if (increment) {
-            setUnnaturalBookCount(prevCount => prevCount + 1);
-            setTotalPoints(prevPoints => prevPoints + 300);
+            setUnnaturalBookCount(unnaturalBookCount + 1);
+            const newBookPoints = naturalBookCount * 500 + (unnaturalBookCount+1) * 300;
+            setBookPoints(newBookPoints);
+            setTotalPoints(calculateTotalPoints(cardPoints, newBookPoints));
         } else {
-            if (UnnaturalBookCount > 0) {
-                setUnnaturalBookCount(prevCount => prevCount - 1);
-                setTotalPoints(prevPoints => prevPoints - 300);
+            if (unnaturalBookCount > 0) {
+                setUnnaturalBookCount(unnaturalBookCount - 1);
+                const newBookPoints = naturalBookCount * 500 + (unnaturalBookCount-1) * 300;
+                setBookPoints(newBookPoints);
+                setTotalPoints(calculateTotalPoints(cardPoints, newBookPoints));
             }
         }
     }
     const tableData = [
         ['Natural', naturalBookCount, "-"],
-        ['Unnatural', UnnaturalBookCount, "-"],
+        ['Unnatural', unnaturalBookCount, "-"],
         ['Ace', playedCards[1]?.quantity || "-", unplayedCards[16]?.quantity || "-"],
         ['2', playedCards[2]?.quantity || "-", unplayedCards[17]?.quantity || "-"],
         ['Black 3', playedCards[3]?.quantity || "-", unplayedCards[18]?.quantity || "-"],
@@ -217,7 +234,7 @@ export default function BoxLayoutHeader() {
                     <View style={styles.box}>
                     <BookInput 
                             bookType={"Unnatural Book"} 
-                            count={UnnaturalBookCount}
+                            count={unnaturalBookCount}
                             onIncrement={() => handleUnnaturalBook(true)}
                             onDecrement={() => handleUnnaturalBook(false)}
                         />
