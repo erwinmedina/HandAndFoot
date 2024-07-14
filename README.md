@@ -1,50 +1,27 @@
-# Welcome to your Expo app 👋
+# Hand and Foot
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Getting Started:
+Coming soon. Stay tuned.
 
-## Get started
+## Application Description:
+I wanted to create a simple design/application for my first React Native project. I learned that this card game is very niche, and required an app version of handling scores and rounds. Here is the link to the official rules of the game: [Bicycle Link](https://bicyclecards.com/how-to-play/hand-and-foot). The objective of the game is to simply get rid of your 'hand' first and then your 'foot'. However, at the end of the round, you count the types of cards you played (counting positively in your favor), along with the cards that weren't played (counting negatively against you). This application is meant to sum up and count both sets of cards so that you don't have to write down the score for everyone involved down on paper. 
 
-1. Install dependencies
+Because this is a game that involves a team of 2 individuals, there is still work that is required to making the application more flexible and understanding of how that works. 
 
-   ```bash
-   npm install
-   ```
+## Images
+![Test 1](https://i.imgur.com/NVsiE0R.mp4)
 
-2. Start the app
+## Technology Used
+- React Native (Javascript)
 
-   ```bash
-    npx expo start
-   ```
+## Icebox Items
+- Make the card points more clear and visual.
+- Add the rules as a hamburger option.
+- Add a history of previously played games.
+   - This requires user login.
+- Clean up the `End Round` pop up. Needs a better design.
+- Since it's a team game; Implement some form of network connection between phones. Unsure how or what that looks like. 
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Completed Tasks
+- Create a 'Played' and 'Unplayed' section.
+- Logic for the game.
