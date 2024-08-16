@@ -5,10 +5,14 @@ import CounterInput from "./CounterInput";
 export default function CardGrid({ cards, userInput, setUserInput}) {
 
     const handleIncrement = (cardId, value) => {
+        if (userInput[cardId]?.quantity >= 35) {
+            return;
+        }
         const updatedUserInput = {
             ...userInput,
             [cardId]: { quantity: (userInput[cardId]?.quantity || 0) + 1, value },
         };
+        console.log(cardId, updatedUserInput[cardId].quantity, value);
         setUserInput(cardId, updatedUserInput[cardId].quantity, value);
     };
 

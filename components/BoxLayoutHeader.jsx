@@ -1,10 +1,10 @@
 import { StyleSheet, View, Text } from "react-native"
+import { useState } from "react"
+import { useFonts, Sriracha_400Regular } from "@expo-google-fonts/dev"
 import RoundScore from "./RoundScore"
-import { useState, useEffect } from "react"
 import CardGrid from "./CardGrid";
 import FooterButtons from "./FooterButtons";
 import BookInput from "./BookInput";
-import { useFonts, Sriracha_400Regular } from "@expo-google-fonts/dev"
 import AppLoading from "expo-app-loading";
 import RoundPopUp from "./RoundPopUp";
 import Confirmation from "./Confirmation";
@@ -20,28 +20,47 @@ const calculateCardPoints = (playedCards, unplayedCards) => {
     }
     return totalPoints;
 };
+const calculateGroupedCardPoints = (playedCards, unplayedCards) => {
+    let totalPoints = 0;
+    for (let i = 1; i <= 6; i++) {
+        const playedCardValue = (playedCards[30+i] && playedCards[30+i].value * playedCards[30+i].quantity) || 0;
+        const unplayedCardValue = (unplayedCards[i + 36] && unplayedCards[i + 36].value * unplayedCards[i + 36].quantity) || 0;
+        totalPoints += playedCardValue - unplayedCardValue;
+    }
+    return totalPoints;
+}
 
-export default function BoxLayoutHeader() {
+export default function BoxLayoutHeader( { playedCards, setPlayedCards, unplayedCards, setUnplayedCards, totalPoints, setTotalPoints, naturalBookCount, setNaturalBookCount, unnaturalBookCount, setUnnaturalBookCount, isGrouped, cardPoints, setCardPoints, bookPoints, setBookPoints } ) {
     const [popupVisible, setPopupVisible] = useState(false);
     const [endGamePopUp, setEndGamePopUp] = useState(false);
     const [finalReport, setFinalReport] = useState(false);
     const [activeSection, setActiveSection] = useState("played");
-    const [playedCards, setPlayedCards] = useState({});
-    const [unplayedCards, setUnplayedCards] = useState({});
-    const [cardPoints, setCardPoints] = useState(0);
-    const [bookPoints, setBookPoints] = useState(0);
-    const [totalPoints, setTotalPoints] = useState(0);
     const [currentRound, setCurrentRound] = useState(1);
     const [rounds, setRounds] = useState([{}, {}, {}, {}]);
     const [gameScore, setGameScore] = useState(0);
-    const [naturalBookCount, setNaturalBookCount] = useState(0);
-    const [unnaturalBookCount, setUnnaturalBookCount] = useState(0);
+
+    const groupedPlayedCardList = [
+        { id: 31, imageName: require('../assets/images/ace_of_spades.png'), value: 20, name: 'Ace'},
+        { id: 32, imageName: require('../assets/images/2_of_clubs.png'), value: 20, name: '2'},
+        // { id: 33, imageName: require('../assets/images/3_of_diamonds.png'), value: -100, name: 'Red 3'},
+        { id: 34, imageName: require('../assets/images/4_of_clubs.png'), value: 5, name: '4'},
+        { id: 35, imageName: require('../assets/images/8_of_spades.png'), value: 10, name: '8'},
+        { id: 36, imageName: require('../assets/images/black_joker.png'), value: 50, name: 'Joker'},
+    ];
+    const groupedUnplayedCardList = [
+        { id: 37, imageName: require('../assets/images/ace_of_spades.png'), value: 20, name: 'Ace'},
+        { id: 38, imageName: require('../assets/images/2_of_clubs.png'), value: 20, name: '2'},
+        { id: 39, imageName: require('../assets/images/3_of_diamonds.png'), value: -100, name: 'Red 3'},
+        { id: 40, imageName: require('../assets/images/4_of_clubs.png'), value: 5, name: '4'},
+        { id: 41, imageName: require('../assets/images/8_of_spades.png'), value: 10, name: '8'},
+        { id: 42, imageName: require('../assets/images/black_joker.png'), value: 50, name: 'Joker'},
+    ];
 
     const playedCardList = [
         { id: 1, imageName: require('../assets/images/ace_of_spades.png'), value: 20, name: 'Ace'},
         { id: 2, imageName: require('../assets/images/2_of_clubs.png'), value: 20, name: '2'},
-        { id: 3, imageName: require('../assets/images/3_of_clubs.png'), value: 0, name: 'Black 3'},
-        { id: 4, imageName: require('../assets/images/3_of_diamonds.png'), value: -100, name: 'Red 3'},
+        // { id: 3, imageName: require('../assets/images/3_of_clubs.png'), value: 0, name: 'Black 3'},
+        // { id: 4, imageName: require('../assets/images/3_of_diamonds.png'), value: -100, name: 'Red 3'},
         { id: 5, imageName: require('../assets/images/4_of_clubs.png'), value: 5, name: '4'},
         { id: 6, imageName: require('../assets/images/5_of_hearts.png'), value: 5, name: '5'},
         { id: 7, imageName: require('../assets/images/6_of_clubs.png'), value: 5, name: '6'},
@@ -80,7 +99,6 @@ export default function BoxLayoutHeader() {
     }
 
     const calculateTotalPoints = (cardPoints, bookPoints) => {
-        console.log(cardPoints, bookPoints);
         return cardPoints + bookPoints;
     }
 
@@ -115,7 +133,12 @@ export default function BoxLayoutHeader() {
             [cardId]: { quantity, value },
         };
         setPlayedCards(updatedPlayedCards);
-        const newCardPoints = calculateCardPoints(updatedPlayedCards, unplayedCards);
+        var newCardPoints = 0;
+        if (isGrouped) {
+            newCardPoints += calculateGroupedCardPoints(updatedPlayedCards, unplayedCards);
+        } else {
+            newCardPoints += calculateCardPoints(updatedPlayedCards, unplayedCards);
+        }
         setCardPoints(newCardPoints);
         setTotalPoints(calculateTotalPoints(newCardPoints, bookPoints));
     };
@@ -171,6 +194,9 @@ export default function BoxLayoutHeader() {
 
     const handleNaturalBook = (increment) => {
         if (increment) {
+            if (naturalBookCount >= 20) {
+                return;
+            }
             setNaturalBookCount(naturalBookCount + 1);
             const newBookPoints = (naturalBookCount+1) * 500 + unnaturalBookCount * 300;
             setBookPoints(newBookPoints);
@@ -186,6 +212,9 @@ export default function BoxLayoutHeader() {
     }
     const handleUnnaturalBook = (increment) => {
         if (increment) {
+            if (unnaturalBookCount >= 20) {
+                return;
+            }
             setUnnaturalBookCount(unnaturalBookCount + 1);
             const newBookPoints = naturalBookCount * 500 + (unnaturalBookCount+1) * 300;
             setBookPoints(newBookPoints);
@@ -200,8 +229,8 @@ export default function BoxLayoutHeader() {
         }
     }
     const tableData = [
-        ['Natural', naturalBookCount, "-"],
-        ['Unnatural', unnaturalBookCount, "-"],
+        ['Natural', naturalBookCount, ""],
+        ['Unnatural', unnaturalBookCount, ""],
         ['Ace', playedCards[1]?.quantity || "-", unplayedCards[16]?.quantity || "-"],
         ['2', playedCards[2]?.quantity || "-", unplayedCards[17]?.quantity || "-"],
         ['Black 3', playedCards[3]?.quantity || "-", unplayedCards[18]?.quantity || "-"],
@@ -218,6 +247,16 @@ export default function BoxLayoutHeader() {
         ['King', playedCards[14]?.quantity || "-", unplayedCards[29]?.quantity || "-"],
         ['Joker', playedCards[15]?.quantity || "-", unplayedCards[30]?.quantity || "-"],
     ];
+    const groupedTableData = [
+        ['Natural', naturalBookCount, ""],
+        ['Unnatural', unnaturalBookCount, ""],
+        ['Ace', playedCards[31]?.quantity || "-", unplayedCards[37]?.quantity || "-"],
+        ['2', playedCards[32]?.quantity || "-", unplayedCards[38]?.quantity || "-"],
+        ['Red 3', playedCards[33]?.quantity || "-", unplayedCards[39]?.quantity || "-"],
+        ['4 - 7', playedCards[34]?.quantity || "-", unplayedCards[40]?.quantity || "-"],
+        ['8 - K', playedCards[35]?.quantity || "-", unplayedCards[41]?.quantity || "-"],
+        ['Joker', playedCards[36]?.quantity || "-", unplayedCards[42]?.quantity || "-"],
+    ]
 
     return (
         <View style={styles.container}>
@@ -248,22 +287,41 @@ export default function BoxLayoutHeader() {
             </View>
             <PlayedSection onSectionChange={handleSectionChange}/>
             <View style={styles.theCardGrid}>
-                { activeSection === "played" ? (
-                        <CardGrid cards={playedCardList} userInput={playedCards} setUserInput={updatePlayedCards}/>
+                { isGrouped ? (
+                    activeSection === "played" ? (
+                        <CardGrid cards={groupedPlayedCardList} userInput={playedCards} setUserInput={updatePlayedCards}/>
                         ) : (
-                        <CardGrid cards={unplayedCardList} userInput={unplayedCards} setUserInput={updateUnplayedCards}/>
+                        <CardGrid cards={groupedUnplayedCardList} userInput={unplayedCards} setUserInput={updateUnplayedCards}/>
                         )
+                    ) 
+                    :
+                    activeSection === "played" ? (
+                        <CardGrid cards={playedCardList} userInput={playedCards} setUserInput={updatePlayedCards}/>
+                    ) : (
+                        <CardGrid cards={unplayedCardList} userInput={unplayedCards} setUserInput={updateUnplayedCards}/>
+                    )
                 }
-            </View>
+            </View> 
             <FooterButtons onEndRound={handleEndRound} onEndGame={handleEndGamePopUpOpen}/>
-            <RoundPopUp
-                visible={popupVisible}
-                onClose={handleClosePopup}
-                onContinue={handleContinue}
-                tableData={tableData}
-                totalSum={totalPoints}
-                currentRound={currentRound}
-            />
+            {isGrouped ? 
+                <RoundPopUp
+                    visible={popupVisible}
+                    onClose={handleClosePopup}
+                    onContinue={handleContinue}
+                    tableData={groupedTableData}
+                    totalSum={totalPoints}
+                    currentRound={currentRound}
+                />
+                :
+                <RoundPopUp
+                    visible={popupVisible}
+                    onClose={handleClosePopup}
+                    onContinue={handleContinue}
+                    tableData={tableData}
+                    totalSum={totalPoints}
+                    currentRound={currentRound}
+                />
+            }
             <Confirmation
                 visible={endGamePopUp}
                 onClose={handleEndGamePopUpClose}
