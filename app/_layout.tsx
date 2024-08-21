@@ -10,7 +10,7 @@ export default function HomeScreen() {
     const [totalPoints, setTotalPoints] = useState(0);
     const [naturalBookCount, setNaturalBookCount] = useState(0);
     const [unnaturalBookCount, setUnnaturalBookCount] = useState(0);
-    const [isGrouped, setIsGrouped] = useState(true);
+    const [isGrouped, setIsGrouped] = useState(false);
     const [cardPoints, setCardPoints] = useState(0);
     const [bookPoints, setBookPoints] = useState(0);
 

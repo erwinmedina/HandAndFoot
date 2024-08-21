@@ -1,6 +1,7 @@
-import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, Modal, Pressable } from "react-native"
-import { useFonts, Sriracha_400Regular } from "@expo-google-fonts/dev"
+import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, Modal, Pressable } from "react-native";
+import { useFonts, Sriracha_400Regular } from "@expo-google-fonts/dev";
 import AppLoading from "expo-app-loading";
+import RulesScreen from "./RulesScreen";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -10,6 +11,7 @@ export default function CustomHeader({ onClear, isGrouped, setIsGrouped }) {
     })
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [rulesModalVisible, setRulesModalVisible] = useState(false);
 
     if (!fontsLoaded) {
         return <AppLoading/>
@@ -17,6 +19,9 @@ export default function CustomHeader({ onClear, isGrouped, setIsGrouped }) {
 
     const handleOptionSelect = (option) => {
         setModalVisible(false)
+        if (option == 'Rules') {
+            setRulesModalVisible(true);
+        }
     }
     const handleClear = () => {
         onClear()
@@ -61,6 +66,20 @@ export default function CustomHeader({ onClear, isGrouped, setIsGrouped }) {
                             </TouchableOpacity>
                         </View>
                     </Pressable>
+                </Modal>
+            )}
+            { rulesModalVisible && (
+                <Modal
+                    visible={rulesModalVisible}
+                    onRequestClose={() => setRulesModalVisible(false)}
+                    animationType="slide"
+                >  
+                    <View style={{ flex: 1 }}>
+                        <TouchableOpacity style={styles.closeButton} onPress={() => setRulesModalVisible(false)}>
+                            <Ionicons name="close" size="30" color="black"/>
+                        </TouchableOpacity>
+                        <RulesScreen/>
+                    </View>
                 </Modal>
             )}
         </SafeAreaView>
@@ -113,5 +132,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-start",
         alignItems: "flex-end",
+    },
+    closeButton: {
+        position: "absolute",
+        top: 20,
+        right: 20,
+        zIndex: 1,
+        padding: 10,
+        backgroundColor: "white",
+        borderRadius: 50,
     }
 })

@@ -12,7 +12,6 @@ export default function CardGrid({ cards, userInput, setUserInput}) {
             ...userInput,
             [cardId]: { quantity: (userInput[cardId]?.quantity || 0) + 1, value },
         };
-        console.log(cardId, updatedUserInput[cardId].quantity, value);
         setUserInput(cardId, updatedUserInput[cardId].quantity, value);
     };
 
@@ -33,6 +32,7 @@ export default function CardGrid({ cards, userInput, setUserInput}) {
                 <Card 
                     imageName={item.imageName} 
                     cardId={item.id} 
+                    cardValue={item.value}
                     onIncrement={() => handleIncrement(item.id, item.value)} 
                     onDecrement={() => handleDecrement(item.id, item.value)}
                 />

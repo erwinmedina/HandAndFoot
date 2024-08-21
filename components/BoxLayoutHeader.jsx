@@ -16,16 +16,16 @@ const calculateCardPoints = (playedCards, unplayedCards) => {
     for (let i = 1; i <= 15; i++) {
         const playedCardValue = (playedCards[i] && playedCards[i].value * playedCards[i].quantity) || 0;
         const unplayedCardValue = (unplayedCards[i + 15] && unplayedCards[i + 15].value * unplayedCards[i + 15].quantity) || 0;
-        totalPoints += playedCardValue - unplayedCardValue;
+        totalPoints += playedCardValue + unplayedCardValue;
     }
     return totalPoints;
 };
 const calculateGroupedCardPoints = (playedCards, unplayedCards) => {
     let totalPoints = 0;
     for (let i = 1; i <= 6; i++) {
-        const playedCardValue = (playedCards[30+i] && playedCards[30+i].value * playedCards[30+i].quantity) || 0;
+        const playedCardValue = (playedCards[i + 30] && playedCards[i + 30].value * playedCards[i + 30].quantity) || 0;
         const unplayedCardValue = (unplayedCards[i + 36] && unplayedCards[i + 36].value * unplayedCards[i + 36].quantity) || 0;
-        totalPoints += playedCardValue - unplayedCardValue;
+        totalPoints += playedCardValue + unplayedCardValue;
     }
     return totalPoints;
 }
@@ -48,12 +48,12 @@ export default function BoxLayoutHeader( { playedCards, setPlayedCards, unplayed
         { id: 36, imageName: require('../assets/images/black_joker.png'), value: 50, name: 'Joker'},
     ];
     const groupedUnplayedCardList = [
-        { id: 37, imageName: require('../assets/images/ace_of_spades.png'), value: 20, name: 'Ace'},
-        { id: 38, imageName: require('../assets/images/2_of_clubs.png'), value: 20, name: '2'},
+        { id: 37, imageName: require('../assets/images/ace_of_spades.png'), value: -20, name: 'Ace'},
+        { id: 38, imageName: require('../assets/images/2_of_clubs.png'), value: -20, name: '2'},
         { id: 39, imageName: require('../assets/images/3_of_diamonds.png'), value: -100, name: 'Red 3'},
-        { id: 40, imageName: require('../assets/images/4_of_clubs.png'), value: 5, name: '4'},
-        { id: 41, imageName: require('../assets/images/8_of_spades.png'), value: 10, name: '8'},
-        { id: 42, imageName: require('../assets/images/black_joker.png'), value: 50, name: 'Joker'},
+        { id: 40, imageName: require('../assets/images/4_of_clubs.png'), value: -5, name: '4'},
+        { id: 41, imageName: require('../assets/images/8_of_spades.png'), value: -10, name: '8'},
+        { id: 42, imageName: require('../assets/images/black_joker.png'), value: -50, name: 'Joker'},
     ];
 
     const playedCardList = [
@@ -74,21 +74,21 @@ export default function BoxLayoutHeader( { playedCards, setPlayedCards, unplayed
         { id: 15, imageName: require('../assets/images/black_joker.png'), value: 50, name: 'Joker'},
     ];
     const unplayedCardList = [
-        { id: 16, imageName: require('../assets/images/ace_of_spades.png'), value: 20, name: 'Ace'},
-        { id: 17, imageName: require('../assets/images/2_of_clubs.png'), value: 20, name: '2'},
+        { id: 16, imageName: require('../assets/images/ace_of_spades.png'), value: -20, name: 'Ace'},
+        { id: 17, imageName: require('../assets/images/2_of_clubs.png'), value: -20, name: '2'},
         { id: 18, imageName: require('../assets/images/3_of_clubs.png'), value: 0, name: 'Black 3'},
         { id: 19, imageName: require('../assets/images/3_of_diamonds.png'), value: -100, name: 'Red 3'},
-        { id: 20, imageName: require('../assets/images/4_of_clubs.png'), value: 5, name: '4'},
-        { id: 21, imageName: require('../assets/images/5_of_hearts.png'), value: 5, name: '5'},
-        { id: 22, imageName: require('../assets/images/6_of_clubs.png'), value: 5, name: '6'},
-        { id: 23, imageName: require('../assets/images/7_of_diamonds.png'), value: 5, name: '7'},
-        { id: 24, imageName: require('../assets/images/8_of_spades.png'), value: 10, name: '8'},
-        { id: 25, imageName: require('../assets/images/9_of_hearts.png'), value: 10, name: '9'},
-        { id: 26, imageName: require('../assets/images/10_of_clubs.png'), value: 10, name: '10'},
-        { id: 27, imageName: require('../assets/images/jack_of_diamonds2.png'), value: 10, name: 'Jack'},
-        { id: 28, imageName: require('../assets/images/queen_of_hearts2.png'), value: 10, name: 'Queen'},
-        { id: 29, imageName: require('../assets/images/king_of_spades2.png'), value: 10, name: 'King'},
-        { id: 30, imageName: require('../assets/images/black_joker.png'), value: 50, name: 'Joker'},
+        { id: 20, imageName: require('../assets/images/4_of_clubs.png'), value: -5, name: '4'},
+        { id: 21, imageName: require('../assets/images/5_of_hearts.png'), value: -5, name: '5'},
+        { id: 22, imageName: require('../assets/images/6_of_clubs.png'), value: -5, name: '6'},
+        { id: 23, imageName: require('../assets/images/7_of_diamonds.png'), value: -5, name: '7'},
+        { id: 24, imageName: require('../assets/images/8_of_spades.png'), value: -10, name: '8'},
+        { id: 25, imageName: require('../assets/images/9_of_hearts.png'), value: -10, name: '9'},
+        { id: 26, imageName: require('../assets/images/10_of_clubs.png'), value: -10, name: '10'},
+        { id: 27, imageName: require('../assets/images/jack_of_diamonds2.png'), value: -10, name: 'Jack'},
+        { id: 28, imageName: require('../assets/images/queen_of_hearts2.png'), value: -10, name: 'Queen'},
+        { id: 29, imageName: require('../assets/images/king_of_spades2.png'), value: -10, name: 'King'},
+        { id: 30, imageName: require('../assets/images/black_joker.png'), value: -50, name: 'Joker'},
     ];
 
     let [fontsLoaded] = useFonts({
@@ -149,7 +149,12 @@ export default function BoxLayoutHeader( { playedCards, setPlayedCards, unplayed
             [cardId]: { quantity, value },
         };
         setUnplayedCards(updatedUnplayedCards);
-        const newCardPoints = calculateCardPoints(playedCards, updatedUnplayedCards);
+        var newCardPoints = 0;
+        if (isGrouped) {
+            newCardPoints = calculateGroupedCardPoints(playedCards, updatedUnplayedCards);
+        } else {
+            newCardPoints = calculateCardPoints(playedCards, updatedUnplayedCards);
+        }
         setCardPoints(newCardPoints);
         setTotalPoints(calculateTotalPoints(newCardPoints, bookPoints));
     };

@@ -12,18 +12,17 @@ Because this is a game that involves a team of 2 individuals, there is still wor
 
 | Page | Image |
 | ---- | ----- |
-| Demo | <video controls src="https://i.imgur.com/NVsiE0R.mp4" title="https://i.imgur.com/NVsiE0R.mp4" width="200"></video> |
-| End Round Pop Up| ![End Round Pop Up](https://i.imgur.com/gexEw6B.jpg)
-| Score Board Flip | ![Score Board Flip](https://i.imgur.com/NmyAx6i.jpg)
-| End Game Confirmation | ![End Game Confirmation Pop Up](https://i.imgur.com/7lqtFHk.jpg)
-| Final Report | ![Final Report](https://i.imgur.com/WIHb9DL.jpg)
+| Demo | <video controls src="https://i.imgur.com/NVsiE0R.mp4" title="https://i.imgur.com/NVsiE0R.mp4" height="600"/>|
+| End Round Pop Up | <img src="https://i.imgur.com/gexEw6B.jpg" height="600">
+| Score Board Flip | <img src="https://i.imgur.com/NmyAx6i.jpg" height="400">
+| End Game Confirmation | <img src="https://i.imgur.com/7lqtFHk.jpg" height="600">
+| Final Report | <img src="https://i.imgur.com/WIHb9DL.jpg" height="400">
 
 ## Technology Used
 - React Native (Javascript)
 
 ## Icebox Items
 - Make the card points more clear and visual.
-- Add the rules as a hamburger option.
 - Add a history of previously played games.
    - This requires user login.
 - Clean up the `End Round` pop up. Needs a better design.
@@ -32,3 +31,4 @@ Because this is a game that involves a team of 2 individuals, there is still wor
 ## Completed Tasks
 - Create a 'Played' and 'Unplayed' section.
 - Logic for the game.
+- Add the rules as a hamburger option.
